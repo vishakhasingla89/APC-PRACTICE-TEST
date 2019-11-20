@@ -1,0 +1,113 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+typedef struct node{
+    int data;
+    int x;
+    struct node *left;
+    struct node *right;
+}treenode;
+
+
+treenode* bst(treenode *n,int data,int x)
+{
+    if(n==NULL)
+    {
+        treenode *nn=(treenode*)malloc(sizeof(treenode));
+        nn->data=data;
+        nn->x=x;
+        nn->left=NULL;
+        nn->right=NULL;
+        return nn;
+    }
+    else if(n->data>data)
+    n->left=bst(n->left,data,x-1);
+    else
+    n->right=bst(n->right,data,x+1);
+    return n;
+}
+
+void push(treenode* queue[],int *front,int *rear,treenode *d)
+{
+    if(*front==-1 && *rear==-1)
+    {
+        (*front)++;
+        (*rear)++;
+        queue[*rear]=d;
+    }
+    else{
+        (*rear)++;
+        queue[*rear]=d;
+    }
+}
+treenode* pop(treenode* queue[],int *front,int *rear)
+{
+    treenode *t=queue[*front];
+    (*front)++;
+    return t;
+}
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    int n;
+    scanf("%d",&n);
+    int i,j,arr[n];
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    treenode *root=NULL;
+    for(i=0;i<n;i++)
+    {
+        root=bst(root,arr[i],0);
+    }
+    treenode* queue[1000];
+    int front=-1,rear=-1;
+    treenode* res[100];
+    int left=50,right=50;
+    push(queue,&front,&rear,root);
+    //printf("%d ",root->data);
+    push(queue,&front,&rear,NULL);
+    while(front < rear)
+    {
+       treenode *ob=pop(queue,&front,&rear);
+       if(ob!=NULL)
+       {
+           res[50+(ob->x)]=ob;
+           if((50+(ob->x))<left)
+           left=50 + (ob->x);
+           if((50+(ob->x))>right)
+           right=50 + (ob->x);
+       } 
+       if(ob==NULL)
+       {
+           push(queue,&front,&rear,NULL);
+       }
+       else{
+           if(ob->left)
+           {
+           push(queue,&front,&rear,ob->left);
+           //printf("%d ",ob->left->data);
+           }
+           if(ob->right)
+           {
+           push(queue,&front,&rear,ob->right);
+           //printf("%d ",ob->right->data);
+           }
+       }
+    }
+
+  // printf("%d %d ",left,right);
+    //printf("\n");
+    for(i=left;i<=right;i++)
+    {
+        printf("%d ",res[i]->data);
+    }
+    return 0;
+}
