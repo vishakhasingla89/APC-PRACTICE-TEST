@@ -1,0 +1,81 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+
+public class Solution {
+    static  int index=0;
+    public static void main(String args[] ) throws Exception {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        int n,i,j;
+        Scanner sc=new Scanner(System.in);
+        n=sc.nextInt();
+        int preorder[]=new int[n];
+        int inorder[]=new int[n];
+        for(i=0;i<n;i++)
+        preorder[i]=sc.nextInt();
+        for(i=0;i<n;i++)
+        inorder[i]=sc.nextInt();
+        Node root=null;
+        int start=0,end=n;
+        //Integer index=new Integer(0);
+        root=construct_tree(preorder,inorder,start,end);
+        postorder(root);
+
+    }
+    public static void postorder(Node root)
+    {
+        if(root==null)
+        return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.get_val()+" ");
+    }
+    
+    public static Node construct_tree(int preorder[],int inorder[],int start,int end)
+        {
+            if(start>=end)
+            return null;
+            if(index>=preorder.length)
+            return null;
+            int i=find(inorder,preorder[index],start,end);
+            Node root=new Node(inorder[i]);
+            //System.out.println(root.get_val());
+            index++;
+            root.left=construct_tree(preorder,inorder,start,i);
+        
+            root.right=construct_tree(preorder,inorder,i+1,end);
+            return root;
+
+        }
+        public static int find(int inorder[],int ele,int start,int end)
+        {
+            int i;
+            for(i=start;i<end;i++)
+            {
+                if(inorder[i]==ele)
+                return i;
+            }
+            return 0;
+        }
+
+ 
+    static private class Node{
+        int data;
+        Node left;
+        Node right;
+        Node(int data)
+        {
+            this.data=data;
+            this.left=null;
+            this.right=null;
+        }
+        int get_val()
+        {
+            return this.data;
+        }
+    }
+
+}
