@@ -1,0 +1,67 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+
+typedef struct node{
+    int data;
+    int x;
+    struct node *left;
+    struct node *right;
+}treenode;
+
+
+treenode* bst(treenode *n,int data,int x)
+{
+    if(n==NULL)
+    {
+        treenode *nn=(treenode*)malloc(sizeof(treenode));
+        nn->data=data;
+        nn->x=x;
+        nn->left=NULL;
+        nn->right=NULL;
+        return nn;
+    }
+    else if(n->data>data)
+    n->left=bst(n->left,data,x-1);
+    else
+    n->right=bst(n->right,data,x+1);
+    return n;
+}
+int max(int a,int b)
+{
+    return a>b?a:b;
+}
+int height(treenode *n)
+{
+    if(n==NULL)
+    return 0;
+    return 1+max(height(n->left),height(n->right));
+}
+
+int diameter(treenode *n)
+{
+    return 1+height(n->left)+height(n->right);
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    int n;
+    scanf("%d",&n);
+    int i,j,arr[n];
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    treenode *root=NULL;
+    for(i=0;i<n;i++)
+    {
+        root=bst(root,arr[i],0);
+    }
+    printf("%d",diameter(root));
+    return 0;
+}
