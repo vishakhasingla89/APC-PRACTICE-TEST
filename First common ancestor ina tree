@@ -1,0 +1,104 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+int flag=0;
+typedef struct node{
+    int data;
+    struct node *left;
+    struct node *right;
+}treenode;
+
+
+treenode* bst(treenode *n,int data)
+{
+    if(n==NULL)
+    {
+        treenode *nn=(treenode*)malloc(sizeof(treenode));
+        nn->data=data;
+        nn->left=NULL;
+        nn->right=NULL;
+        return nn;
+    }
+    else if(n->data>data)
+    n->left=bst(n->left,data);
+    else
+    n->right=bst(n->right,data);
+    return n;
+}
+
+treenode* lca(treenode *root,int e1,int e2) {
+    if(root==NULL)
+    return NULL;
+    if((root->data==e1)||(root->data==e2))
+    return root;
+    treenode *x=lca(root->left,e1,e2);
+    treenode *y=lca(root->right,e1,e2);
+    if(x&&y)
+    {
+        flag=1;
+    return root;
+    }
+    else if(x)
+    return x;
+    else if(y)
+    return y;
+    return NULL;
+    
+}
+treenode* parent(treenode *n,treenode *child){
+    if(n==NULL)
+    return NULL;
+    if(n->left==child || n->right==child)
+    return n;
+    else if(n->data>child->data)
+    return parent(n->left,child);
+    else
+    return parent(n->right,child);
+}
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    int n,k,i,j;
+    scanf("%d",&n);
+     int arr[n];
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    treenode *root=NULL;
+    for(i=0;i<n;i++)
+    {
+        root=bst(root,arr[i]);
+    }
+    scanf("%d",&k);
+    for(i=0;i<k;i++)
+    {
+        int e1,e2,res;
+        scanf("%d %d",&e1,&e2);
+         treenode* temp=lca(root,e1,e2);
+        
+    
+            if(flag==1)
+            res=temp->data;
+            else{
+                if(temp==root)
+                res=-1;
+                else{
+                treenode *p=parent(root,temp);
+                res=p->data;
+                }
+            }
+        
+        
+        printf("%d\n",res);
+  
+
+    }
+    
+    return 0;
+}
