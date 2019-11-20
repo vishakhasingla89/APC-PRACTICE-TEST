@@ -1,0 +1,69 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+char* isPangram(char** ptr,int n)
+{
+    char *res=(char*)malloc(sizeof(char)*0);
+    int i=0,j=0;
+    while(i!=n)
+    {
+        j=0;
+        res=(char*)realloc(res,sizeof(char)*(i+1));
+        int arr[26]={0},count=0;
+        while((*(*(ptr+i)+j))!='\0')
+        {
+            if((*(*(ptr+i)+j))!=' ')
+            {
+            int x=(int)(*(*(ptr+i)+j));
+            x-=97;
+            if(arr[x]==0)
+            {
+                arr[x]=1;
+                count++;
+            }
+            }
+            j++;
+        }
+        if(count==26)
+        res[i]='1';
+        else
+        res[i]='0';
+        i++;
+
+    }
+    res=(char*)realloc(res,sizeof(char)*(i+1));
+    res[i]='\0';
+  
+   // res=(char*)realloc(res,sizeof(char)*i);
+    //res[i]='\0';
+    return res;
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    int n;
+     int i,j;
+    scanf("%d",&n);
+    //char strings[n][100000];
+    char **strings=(char**)malloc(sizeof(char*)*n);
+    for(i=0;i<n;i++)
+    strings[i]=(char*)malloc(sizeof(char)*100000);
+    char temp;
+    scanf("%c",&temp);
+    for(i=0;i<n;i++)
+   {
+       char ch;
+       //scanf("%c",&ch);
+       //scanf("%[^\n]s",strings[i]);
+       gets(strings[i]);
+   }
+    char* res;
+    res=isPangram(strings,n);
+    printf("%s",res);
+    return 0;
+}
