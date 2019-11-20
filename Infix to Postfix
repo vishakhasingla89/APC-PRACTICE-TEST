@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct stack{
+    char data;
+    struct stack *next;
+}stack;
+void push(stack **head,char data)
+{
+    stack *nn=(stack*)malloc(sizeof(stack));
+    nn->data=data;
+    nn->next=*head;
+    *head=nn;
+}
+void pop(stack **head)
+{
+    stack *temp=*head;
+    *head=temp->next;
+    temp=NULL;
+    free(temp);
+}
+char top(stack *head)
+{
+    return (head->data);
+}
+int isEmpty(stack *head)
+{
+    if(head==NULL)
+    return 1;
+    else
+    return 0;
+}
+
+int high_priority(char a,char b)
+{
+    if((a=='*') || (a=='/'))
+    {
+        if((b=='+') || (b=='-'))
+        return 1;
+        else
+        return 0;
+    }
+    
+    return 0;
+}
+
+int main()
+{
+    char infix[100],postfix[100];
+    int k=0;
+    scanf("%s",infix);
+    int i=0;
+    stack *st=NULL;
+    while(infix[i]!='\0')
+    {
+        char ch=infix[i];
+        if(ch>=97 && ch<=123)
+        postfix[k++]=ch;
+        else if(isEmpty(st) || high_priority(ch,top(st)))
+        push(&st,ch);
+        else
+        {
+            while((!isEmpty(st)) && !high_priority(ch,top(st)))
+            {
+                postfix[k++]=top(st);
+                pop(&st);
+            }
+            push(&st,ch);
+        }
+        i++;
+    }
+    while(!isEmpty(st)) {
+        postfix[k++]=top(st);
+        pop(&st);
+    }
+    postfix[k]='\0';
+    printf("%s",postfix);
+
+}
